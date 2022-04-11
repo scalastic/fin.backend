@@ -19,5 +19,11 @@ Imports:
     TTR,
     tm,
     xts
+Depends:
+  unbalanced
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
+Suggests: 
+    testthat (>= 3.0.0),
+    caret
+Config/testthat/edition: 3

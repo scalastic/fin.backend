@@ -27,17 +27,17 @@ Constants.PERF_RATIO_STOPLOSS <- 1/5
 #' @export
 
 Constants.ACHAT <- {
-  .Deprecated(new = "constant.BUY", package = "yoolook", old = "Constants.ACHAT", msg = "Constants.ACHAT is deprecated, use constant.BUY instead.")
+  .Deprecated(new = "constant.BUY", package = "fin.backend", old = "Constants.ACHAT", msg = "Constants.ACHAT is deprecated, use constant.BUY instead.")
   1
 }
 #' @export
 Constants.VENTE <- {
-  .Deprecated(new = "constant.SELL", package = "yoolook", old = "Constants.VENTE", msg = "Constants.VENTE is deprecated, use constant.SELL instead.")
+  .Deprecated(new = "constant.SELL", package = "fin.backend", old = "Constants.VENTE", msg = "Constants.VENTE is deprecated, use constant.SELL instead.")
   -1
 }
 #' @export
 Constants.NEUTRE <- {
-  .Deprecated(new = "constant.NEUTRAL", package = "yoolook", old = "Constants.NEUTRE", msg = "Constants.NEUTRE is deprecated, use constant.NEUTRAL instead.")
+  .Deprecated(new = "constant.NEUTRAL", package = "fin.backend", old = "Constants.NEUTRE", msg = "Constants.NEUTRE is deprecated, use constant.NEUTRAL instead.")
   -1
 }
 

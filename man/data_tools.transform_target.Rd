@@ -7,7 +7,11 @@
 data_tools.transform_target(x, order, level)
 }
 \arguments{
-\item{level}{}
+\item{x}{the \code{data.table} containing the target to transform.}
+
+\item{order}{the type of order (see \code{constant})}
+
+\item{level}{the level to consider.}
 }
 \value{
 

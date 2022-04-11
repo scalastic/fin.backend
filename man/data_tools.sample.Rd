@@ -7,6 +7,10 @@
 data_tools.sample(flat_data, forecast_data, order, level, day_date)
 }
 \arguments{
+\item{flat_data}{the data to sample}
+
+\item{forecast_data}{the data from to sample}
+
 \item{day_date}{}
 }
 \value{

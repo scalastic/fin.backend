@@ -7,6 +7,8 @@
 data_tools.extract_forecasting_data_by_level(x, jour_date, level)
 }
 \arguments{
+\item{x}{the \code{data.table} containing the forecasting data}
+
 \item{level}{}
 }
 \description{

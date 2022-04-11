@@ -7,7 +7,7 @@
 data_tools.extract_forecasting_data(x, jour_date)
 }
 \arguments{
-\item{x}{}
+\item{x}{the \code{data.table} containing the forecasting data}
 
 \item{jour_date}{}
 }

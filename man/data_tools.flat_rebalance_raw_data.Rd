@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_tools.R
 \name{data_tools.flat_rebalance_raw_data}
 \alias{data_tools.flat_rebalance_raw_data}
-\title{Flats and rebalances raw data by selecting good known flag r and define Target variable.}
+\title{Flats and re-balances raw data by selecting good known flag r and define Target variable.}
 \usage{
 data_tools.flat_rebalance_raw_data(
   raw_data,
@@ -13,11 +13,19 @@ data_tools.flat_rebalance_raw_data(
 )
 }
 \arguments{
+\item{raw_data}{raw data initially coming from \code{data_tools.load_raw_data}}
+
+\item{level}{the level to re-balance on}
+
+\item{day_date}{the date of the day from where the flags r are computed}
+
+\item{start_flat_raw_data}{the date from where the data are returned}
+
 \item{n}{the number of samples for each target}
 }
 \value{
-
+a data.table containing the computed data
 }
 \description{
-Flats and rebalances raw data by selecting good known flag r and define Target variable.
+Flats and re-balances raw data by selecting good known flag r and define Target variable.
 }

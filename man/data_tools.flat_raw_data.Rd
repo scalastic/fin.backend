@@ -7,10 +7,16 @@
 data_tools.flat_raw_data(raw_data, level, day_date, start_flat_raw_data)
 }
 \arguments{
-\item{start_flat_raw_data}{}
+\item{raw_data}{raw data initially coming from \code{data_tools.load_raw_data}}
+
+\item{level}{the level to select on}
+
+\item{day_date}{the date of the day from where the flags r are computed}
+
+\item{start_flat_raw_data}{the date from where the data are returned}
 }
 \value{
-
+a data.table containing the computed data
 }
 \description{
 Flats raw data by selecting good known flag r and define Target variable.

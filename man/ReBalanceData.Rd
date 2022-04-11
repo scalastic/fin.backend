@@ -2,16 +2,20 @@
 % Please edit documentation in R/data_tools.R
 \name{ReBalanceData}
 \alias{ReBalanceData}
-\title{Title}
+\title{Re-balances target on learning data with \code{unbalanced::ubBalance}}
 \usage{
-ReBalanceData(learningData, order, level, type = "ubSMOTE")
+ReBalanceData(learningData, level, type = "ubSMOTE")
 }
 \arguments{
-\item{type}{}
+\item{learningData}{the data to re-balance}
+
+\item{level}{the level of the target}
+
+\item{type}{the balancing technique to use (ubOver, ubUnder, ubSMOTE, ubOSS, ubCNN, ubENN, ubNCL, ubTomek).}
 }
 \value{
 
 }
 \description{
-Title
+Re-balances target on learning data with \code{unbalanced::ubBalance}
 }

@@ -7,7 +7,7 @@
 data_tools.extract_learning_data_by_level(x, jour_date, level)
 }
 \arguments{
-\item{x}{}
+\item{x}{the \code{data.table} containing the learning data}
 
 \item{level}{}
 }

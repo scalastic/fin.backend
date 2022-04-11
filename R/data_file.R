@@ -1,23 +1,13 @@
 
-data_file.load <- function() {
 
-
-  dt_currency <- data_file.load_currencies()
-  dt_fchi <- data_file.load_fchi()
-  dt_euribor <- data_file.load_euribor()
-  dt_vix <- data_file.load_vix()
-  dt_vxd <- data_file.load_vxd()
-
-}
-
-
-#' Title
+#' Load currencies data from CSV file
 #'
-#' @return
+#' @return a data.table containing the currencies
+#' @importFrom readr read_delim cols col_date col_double col_skip locale
+#' @import data.table
 #' @export
-#' @import readr
-#'
 #' @examples
+#' data_file.load_currencies ()
 data_file.load_currencies <- function() {
 
   data_list <- readr::read_delim("data/ref/HISTORICAL_CURRENCY_RATES.csv",
@@ -74,6 +64,13 @@ data_file.load_currencies <- function() {
 
 }
 
+#' Load FCHI (CAC40) indice from CSV file
+#'
+#' @return a data.table containing the indice's values
+#' @importFrom readr read_delim
+#' @export
+#' @examples
+#' data_file.load_fchi()
 data_file.load_fchi <- function() {
 
   data_list <- readr::read_delim("data/ref/HISTORICAL_FCHI.csv",
@@ -96,6 +93,13 @@ data_file.load_fchi <- function() {
   data_dt_new[data_dt_new$volume > 0,]
 }
 
+#' Load EURIBOR values from CSV file
+#'
+#' @return a data.table containing the EURIBOR's values
+#' @importFrom readr read_delim
+#' @export
+#' @examples
+#' data_file.load_euribor()
 data_file.load_euribor <- function() {
 
   data_list <- readr::read_delim( "data/ref/HISTORICAL_INTERBANK_RATES.csv",
@@ -125,6 +129,13 @@ data_file.load_euribor <- function() {
   setkey (data_dt, date)
 }
 
+#' Load VIX values from CSV file
+#'
+#' @return a data.table containing the VIX's values
+#' @importFrom readr read_delim
+#' @export
+#' @examples
+#' data_file.load_vix()
 data_file.load_vix <- function() {
 
   data_list <- readr::read_delim("data/ref/HISTORICAL_VIX.csv",
@@ -138,6 +149,13 @@ data_file.load_vix <- function() {
   setkey (data_dt, date)
 }
 
+#' Load VXD values from CSV file
+#'
+#' @return a data.table containing the VXD's values
+#' @importFrom readr read_delim
+#' @export
+#' @examples
+#' data_file.load_vxd()
 data_file.load_vxd <- function() {
 
   data_list <- readr::read_delim("data/ref/HISTORICAL_VXD.csv",

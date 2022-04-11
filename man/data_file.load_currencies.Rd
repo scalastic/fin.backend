@@ -2,13 +2,16 @@
 % Please edit documentation in R/data_file.R
 \name{data_file.load_currencies}
 \alias{data_file.load_currencies}
-\title{Title}
+\title{Load currencies data from CSV file}
 \usage{
 data_file.load_currencies()
 }
 \value{
-
+a data.table containing the currencies
 }
 \description{
-Title
+Load currencies data from CSV file
+}
+\examples{
+data_file.load_currencies ()
 }

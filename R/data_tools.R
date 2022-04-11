@@ -32,7 +32,7 @@ data_tools.get_forecasting_dates <- function(asset_code, start_date, end_date) {
 #'
 #' @import data.table
 #' @export
-data_tools.get_daily_forecasting_dates <- function(asset_code, last_date){
+data_tools.get_daily_forecasting_dates <- function(asset_code, last_date) {
 
   indice_dates <- data_file.load_fchi()
   indice_dates <- indice_dates[date > last_date, .(date)]
@@ -51,16 +51,17 @@ data_tools.get_daily_forecasting_dates <- function(asset_code, last_date){
 #'
 #' @param indice_code a character vector indicating the indice code on which forecast will be done.
 #' @param day_date a character vector indicating the date of the day on which forecast will be done.
+#' @param geometric_point_t1 a boolean indicating if geometric point of type 1 should be computed
+#' @param geometric_point_t2 a boolean indicating if geometric point of type 2 should be computed
+#' @param delta_point a boolean indicating if delta point should be computed
+#' @param dynamic_flag a boolean indicating if dynamic flag should be computed
 #'
 #' @return a list of \code{data.table} containing all useful data for the forecasting process.
 #'
-#' @import future
 #' @export
 data_tools.load_raw_data <- function(indice_code, day_date,
                                      geometric_point_t1 = F, geometric_point_t2 = F,
                                      delta_point = T, dynamic_flag = T) {
-
-
 
   raw_data <- list()
 
@@ -92,13 +93,16 @@ data_tools.load_raw_data <- function(indice_code, day_date,
 
 #' Update previously computed data used for forecasting with new day_date data.
 #'
-#' @param ttt the previously computed TTT (Technical Temporary Table) used for Flag R update.
+#' @param raw_data raw data initially coming from \code{data_tools.load_raw_data}
 #' @param indice_code a character vector indicating the indice code on which forecast will be done.
 #' @param day_date a character vector indicating the date of the day on which forecast will be done.
+#' @param geometric_point_t1 a boolean indicating if geometric point of type 1 should be computed
+#' @param geometric_point_t2 a boolean indicating if geometric point of type 2 should be computed
+#' @param delta_point a boolean indicating if delta point should be computed
+#' @param dynamic_flag a boolean indicating if dynamic flag should be computed
 #'
 #' @return a list of \code{data.table} containing all useful data for the forecasting process.
 #'
-#' @import future
 #' @export
 data_tools.update_raw_data <- function(raw_data, indice_code, day_date,
                                        geometric_point_t1 = F, geometric_point_t2 = F,
@@ -133,12 +137,13 @@ data_tools.update_raw_data <- function(raw_data, indice_code, day_date,
 
 #' Flats raw data by selecting good known flag r and define Target variable.
 #'
-#' @param raw_data
-#' @param level
-#' @param day_date
-#' @param start_flat_raw_data
+#' @param raw_data raw data initially coming from \code{data_tools.load_raw_data}
+#' @param level the level to select on
+#' @param day_date the date of the day from where the flags r are computed
+#' @param start_flat_raw_data the date from where the data are returned
 #'
-#' @return
+#' @return a data.table containing the computed data
+#' @import data.table
 #' @export
 data_tools.flat_raw_data <- function(raw_data, level, day_date, start_flat_raw_data) {
 
@@ -161,15 +166,16 @@ data_tools.flat_raw_data <- function(raw_data, level, day_date, start_flat_raw_d
 }
 
 
-#' Flats and rebalances raw data by selecting good known flag r and define Target variable.
+#' Flats and re-balances raw data by selecting good known flag r and define Target variable.
 #'
-#' @param raw_data
-#' @param level
-#' @param day_date
-#' @param start_flat_raw_data
+#' @param raw_data raw data initially coming from \code{data_tools.load_raw_data}
+#' @param level the level to re-balance on
+#' @param day_date the date of the day from where the flags r are computed
+#' @param start_flat_raw_data the date from where the data are returned
 #' @param n the number of samples for each target
 #'
-#' @return
+#' @return a data.table containing the computed data
+#' @import data.table
 #' @export
 data_tools.flat_rebalance_raw_data <- function(raw_data, level, day_date, start_flat_raw_data, n) {
 
@@ -211,6 +217,7 @@ data_tools.flat_rebalance_raw_data <- function(raw_data, level, day_date, start_
 #'
 #' @param x the \code{data.table} to filter.
 #'
+#' @import data.table
 #' @export
 data_tools.filter_nonnumeric <- function(x) {
   nums <- sapply(x, is.numeric)
@@ -250,7 +257,6 @@ data_tools.filter_trend_by_level <- function(x, level){
 
 
 #' Builds two-class \code{Factor} target
-#' @TODO : remove level parameter from all calls
 #'
 #' @param x the \code{data.table} containing the target classes.
 #' @param order the meaningful order type (e.g. Constants.BUY, Constants.SELL, Constants.NEUTRAL)
@@ -303,12 +309,9 @@ data_tools.transform_to_sample <- function(x, order, level, with_geo_pt_t2){
 
 #' Transform Target to a 2-class factor depending on level and order.
 #'
-#' @param x
-#' @param order
-#' @param level
-#'
-#' @importFrom caret downSample
-#' @import unbalanced
+#' @param x the \code{data.table} containing the target to transform.
+#' @param order the type of order (see \code{constant})
+#' @param level the level to consider.
 #'
 #' @return
 #' @export
@@ -346,6 +349,13 @@ data_tools.transform_target <- function(x, order, level){
 # }
 
 
+#' Re-balances target on learning data
+#'
+#' @param learningData the data to re-balance
+#' @param level the level of the target
+#'
+#' @return
+#' @export
 BalanceMinority <- function(learningData, level) {
 
   N.level = nrow(learningData[Target == level])
@@ -360,16 +370,16 @@ BalanceMinority <- function(learningData, level) {
 }
 
 
-#' Title
+#' Re-balances target on learning data with \code{unbalanced::ubBalance}
 #'
-#' @param learningData
-#' @param order
-#' @param level
-#' @param type
+#' @param learningData the data to re-balance
+#' @param level the level of the target
+#' @param type the balancing technique to use (ubOver, ubUnder, ubSMOTE, ubOSS, ubCNN, ubENN, ubNCL, ubTomek).
 #'
 #' @return
-#' @import unbalanced
-ReBalanceData <- function(learningData, order, level, type = "ubSMOTE"){
+#' @import data.table
+#' @importFrom unbalanced ubBalance
+ReBalanceData <- function(learningData, level, type = "ubSMOTE"){
 
   order_level <- BalanceMinority(learningData, level)
   learningData[, Target := factor(Target, levels = order_level, labels = c(2, 1))]
@@ -379,7 +389,7 @@ ReBalanceData <- function(learningData, order, level, type = "ubSMOTE"){
   input <- learningData[ , -Target_pos, with=F]
   output <- learningData[, Target]
 
-  data <- ubBalance(X = as.data.frame(input), Y = output, type = type, positive = 2)
+  data <- unbalanced::ubBalance(X = as.data.frame(input), Y = output, type = type, positive = 2)
 
   balanced_data <- data.table(data$X, Target=data$Y)
   balanced_data$Target <- factor(balanced_data[, Target], levels = c(2, 1), labels = order_level)
@@ -390,8 +400,8 @@ ReBalanceData <- function(learningData, order, level, type = "ubSMOTE"){
 
 #' Samples data to filter forecast.
 #'
-#' @param flat_data
-#' @param forecast_data
+#' @param flat_data the data to sample
+#' @param forecast_data the data from to sample
 #' @param order
 #' @param level
 #' @param day_date
@@ -410,6 +420,11 @@ data_tools.sample <- function(flat_data, forecast_data, order, level, day_date){
 }
 
 # Transform data depending on their lambda (center, scale, BoxCox, YeoJohnson, Log, inverse,...)
+#' @param x the \code{data.table} to transform.
+#'
+#' @param selected_variables
+#' @param to_scale
+#'
 #' @export
 data_tools.transform <- function(x, selected_variables, to_scale = TRUE) {
 
@@ -429,6 +444,11 @@ data_tools.transform <- function(x, selected_variables, to_scale = TRUE) {
 }
 
 # Transform data depending on their lambda (center, scale, BoxCox, YeoJohnson, Log, inverse,...)
+#' @param x the \code{data.table} to transform.
+#'
+#' @param level
+#' @param selected_variables
+#'
 #' @export
 data_tools.transform_by_level <- function(x, level, selected_variables) {
 
@@ -458,7 +478,7 @@ data_tools.target_to_factor <- function(learning_data, order, level){
 
 #' Extracts the learning data depending on the forecast date
 #'
-#' @param x
+#' @param x the \code{data.table} containing the learning data
 #'
 #' @param jour_date
 #' @param level
@@ -480,7 +500,7 @@ data_tools.extract_learning_data <- function(x, jour_date, level){
 
 #' Extracts the learning data depending on the forecast date and the level.
 #'
-#' @param x
+#' @param x the \code{data.table} containing the learning data
 #'
 #' @param jour_date
 #' @param level
@@ -502,7 +522,7 @@ data_tools.extract_learning_data_by_level <- function(x, jour_date, level){
 
 #' Extracts the forecasting data depending on the forecast date
 #'
-#' @param x
+#' @param x the \code{data.table} containing the forecasting data
 #'
 #' @param jour_date
 #'
@@ -519,7 +539,7 @@ data_tools.extract_forecasting_data <- function(x, jour_date){
 
 #' Extracts the forecasting data depending on the forecast date and the level.
 #'
-#' @param x
+#' @param x the \code{data.table} containing the forecasting data
 #' @param jour_date
 #' @param level
 #'

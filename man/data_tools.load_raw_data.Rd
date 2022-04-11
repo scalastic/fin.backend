@@ -17,6 +17,14 @@ data_tools.load_raw_data(
 \item{indice_code}{a character vector indicating the indice code on which forecast will be done.}
 
 \item{day_date}{a character vector indicating the date of the day on which forecast will be done.}
+
+\item{geometric_point_t1}{a boolean indicating if geometric point of type 1 should be computed}
+
+\item{geometric_point_t2}{a boolean indicating if geometric point of type 2 should be computed}
+
+\item{delta_point}{a boolean indicating if delta point should be computed}
+
+\item{dynamic_flag}{a boolean indicating if dynamic flag should be computed}
 }
 \value{
 a list of \code{data.table} containing all useful data for the forecasting process.
