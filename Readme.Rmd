@@ -1,30 +1,30 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
 # fin.backend
 
-This is a basic `R` package used in AI forecasts, which is intended to
-define loading functions, technical indicator calculations and
-rebalancing data. Its specific objective is also to calculate  
+This is a basic `R` package used in AI forecasts, which is intended to define loading functions, technical indicator calculations and rebalancing data. Its specific objective is also to calculate  
 target values.
 
 This R package is intended to be part of a trading signals application.
 
+
 ## Example
 
-``` r
+```{r example}
 library(fin.backend)
-#> Le chargement a nécessité le package : unbalanced
-#> Le chargement a nécessité le package : mlr
-#> Le chargement a nécessité le package : ParamHelpers
-#> Warning message: 'mlr' is in 'maintenance-only' mode since July 2019.
-#> Future development will only happen in 'mlr3'
-#> (<https://mlr3.mlr-org.com>). Due to the focus on 'mlr3' there might be
-#> uncaught bugs meanwhile in {mlr} - please consider switching.
-#> Le chargement a nécessité le package : foreach
-#> Le chargement a nécessité le package : doParallel
-#> Le chargement a nécessité le package : iterators
-#> Le chargement a nécessité le package : parallel
 library(future)
 library(ggplot2)
 
@@ -35,11 +35,7 @@ dt <- data_tools.load_raw_data("t", "2022-04-01")
 dt_plot <- data_tools.flat_raw_data(dt, 7, "2022-04-01", "2015-01-01")
 
 ggplot(dt_plot[date >= "2021-01-01", .(date, close, Target)]) + geom_line(aes(x = as.Date(date), y = close)) + geom_point(aes(x = as.Date(date), y = close, color = factor(round(Target))))
-```
 
-<img src="man/figures/README-example-1.png" width="100%" />
-
-``` r
 plan(sequential)
 ```
 
@@ -64,3 +60,4 @@ plan(sequential)
 -   Historical VXD :
     [CBOE](https://cdn.cboe.com/api/global/us_indices/daily_prices/VXD_History.csv)
     DJIA Volatility
+

@@ -12,6 +12,3 @@ a data.table containing the indice's values
 \description{
 Load FCHI (CAC40) indice from CSV file
 }
-\examples{
-data_file.load_fchi()
-}

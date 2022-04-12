@@ -12,6 +12,3 @@ a data.table containing the VIX's values
 \description{
 Load VIX values from CSV file
 }
-\examples{
-data_file.load_vix()
-}

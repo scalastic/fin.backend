@@ -3,7 +3,7 @@ Type: Package
 Title: Financial Computations Backend
 Version: 0.1.0
 Authors@R: 
-    person("Jean-Jerome", "Levy", , "jeanjerome.levy@gmail.com", role = c("aut", "cre"))
+    person("Jean-Jerome", "Levy", , "contact@scalastic.io", role = c("aut", "cre"))
 Description: This is a basic package used in AI forecasts to find trading signals.
 License: "ODC Open Database License (ODbL) + file LICENSE",
 Encoding: UTF-8

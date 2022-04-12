@@ -12,6 +12,3 @@ a data.table containing the EURIBOR's values
 \description{
 Load EURIBOR values from CSV file
 }
-\examples{
-data_file.load_euribor()
-}

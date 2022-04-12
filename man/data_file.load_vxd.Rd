@@ -12,6 +12,3 @@ a data.table containing the VXD's values
 \description{
 Load VXD values from CSV file
 }
-\examples{
-data_file.load_vxd()
-}

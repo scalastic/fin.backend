@@ -25,9 +25,7 @@ test_that("data_tools.get_daily_forecasting_dates returns dates", {
 
 test_that("data_tools.load_raw_data works", {
 
-  expect_success(
-    data_tools.load_raw_data("t", "2010-01-01")
-  )
+  expect_equal(length(data_tools.load_raw_data("t", "2010-01-01")), 9)
 
 })
 

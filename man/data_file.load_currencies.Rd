@@ -12,6 +12,3 @@ a data.table containing the currencies
 \description{
 Load currencies data from CSV file
 }
-\examples{
-data_file.load_currencies ()
-}

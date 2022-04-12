@@ -6,10 +6,9 @@
 #' @importFrom readr read_delim cols col_date col_double col_skip locale
 #' @import data.table
 #' @export
-#' @examples
-#' data_file.load_currencies ()
 data_file.load_currencies <- function() {
 
+  suppressWarnings(
   data_list <- readr::read_delim("data/ref/HISTORICAL_CURRENCY_RATES.csv",
                                         delim = ";", escape_double = FALSE, col_types = cols(
                                           `Titre :` = col_date(format = "%d/%m/%Y"),
@@ -55,6 +54,7 @@ data_file.load_currencies <- function() {
                                         ),
                                         locale = locale(date_names = "fr", decimal_mark = ","),
                                         trim_ws = TRUE)
+  )
 
   data_dt <- na.omit(setDT(data_list, check.names = TRUE))
   data_dt <- setnames(data_dt, c("date", "aud", "cad", "chf", "cny", "gbp", "inr", "jpy", "usd"))
@@ -69,10 +69,9 @@ data_file.load_currencies <- function() {
 #' @return a data.table containing the indice's values
 #' @importFrom readr read_delim
 #' @export
-#' @examples
-#' data_file.load_fchi()
 data_file.load_fchi <- function() {
 
+  suppressWarnings(
   data_list <- readr::read_delim("data/ref/HISTORICAL_FCHI.csv",
                               col_types = cols(
                                 Date = col_date(format = "%Y-%m-%d"),
@@ -84,6 +83,7 @@ data_file.load_fchi <- function() {
                                 Volume = col_double()
                               ),
                               na = "NA")
+  )
 
   data_dt <- na.omit(setDT(data_list, check.names = TRUE))
   data_dt <- setnames(data_dt, c("date", "open", "high", "low", "close", "volume"))
@@ -98,10 +98,9 @@ data_file.load_fchi <- function() {
 #' @return a data.table containing the EURIBOR's values
 #' @importFrom readr read_delim
 #' @export
-#' @examples
-#' data_file.load_euribor()
 data_file.load_euribor <- function() {
 
+  suppressWarnings(
   data_list <- readr::read_delim( "data/ref/HISTORICAL_INTERBANK_RATES.csv",
                           delim = ";", escape_double = FALSE, col_types = cols(
                             `Titre :` = col_date(format = "%d/%m/%Y"),
@@ -122,6 +121,7 @@ data_file.load_euribor <- function() {
                           ),
                           locale = locale(date_names = "fr", decimal_mark = ","),
                           na = "NA", trim_ws = TRUE )
+  )
 
   data_dt <- na.omit(setDT(data_list, check.names = TRUE))
   data_dt <- setnames(data_dt, c("date", "1m", "1s", "12m", "3m", "6m"))
@@ -134,14 +134,14 @@ data_file.load_euribor <- function() {
 #' @return a data.table containing the VIX's values
 #' @importFrom readr read_delim
 #' @export
-#' @examples
-#' data_file.load_vix()
 data_file.load_vix <- function() {
 
+  suppressWarnings(
   data_list <- readr::read_delim("data/ref/HISTORICAL_VIX.csv",
                         col_types = cols(Date = col_date(format = "%Y-%m-%d"),
                                          Close = col_skip(),
                                          Volume = col_skip()))
+  )
 
   data_dt <- na.omit(setDT(data_list, check.names = TRUE))
   data_dt <- setnames(data_dt, c("date", "open", "high", "low", "close"))
@@ -154,12 +154,12 @@ data_file.load_vix <- function() {
 #' @return a data.table containing the VXD's values
 #' @importFrom readr read_delim
 #' @export
-#' @examples
-#' data_file.load_vxd()
 data_file.load_vxd <- function() {
 
+  suppressWarnings(
   data_list <- readr::read_delim("data/ref/HISTORICAL_VXD.csv",
                         col_types = cols(DATE = col_date(format = "%m/%d/%Y")))
+  )
 
   data_dt <- na.omit(setDT(data_list, check.names = TRUE))
   data_dt <- setnames(data_dt, c("date", "open", "high", "low", "close"))

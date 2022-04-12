@@ -248,7 +248,7 @@ indicator_technic.get <- function(indice_code, day_date) {
 
   # Case of two different 'maType's for both MAs
   label <- "RSI_MA2"
-  result <- RSI(dt[,close], n=14, maType=list(maUp=list(EMA,ratio=1/5), maDown=list(WMA)))
+  result <- RSI(dt[,close], n=14, maType=list(maUp=list(EMA), maDown=list(WMA)))
   TI_RSI_MA2 <- result
 
   #-----------------------------------------------------------------------
