@@ -6,10 +6,11 @@
 #' @importFrom readr read_delim cols col_date col_double col_skip locale
 #' @import data.table
 #' @export
+#' @example data_file.load_currencies()
 data_file.load_currencies <- function() {
 
   suppressWarnings(
-  data_list <- readr::read_delim("data/ref/HISTORICAL_CURRENCY_RATES.csv",
+  data_list <- readr::read_delim(system.file("testdata/HISTORICAL_CURRENCY_RATES.csv", package = "fin.backend"),
                                         delim = ";", escape_double = FALSE, col_types = cols(
                                           `Titre :` = col_date(format = "%d/%m/%Y"),
                                           `Dollar australien (AUD)` = col_double(),
@@ -72,7 +73,7 @@ data_file.load_currencies <- function() {
 data_file.load_fchi <- function() {
 
   suppressWarnings(
-  data_list <- readr::read_delim("data/ref/HISTORICAL_FCHI.csv",
+  data_list <- readr::read_delim(system.file("testdata/HISTORICAL_FCHI.csv", package = "fin.backend"),
                               col_types = cols(
                                 Date = col_date(format = "%Y-%m-%d"),
                                 Open = col_double(),
@@ -101,7 +102,7 @@ data_file.load_fchi <- function() {
 data_file.load_euribor <- function() {
 
   suppressWarnings(
-  data_list <- readr::read_delim( "data/ref/HISTORICAL_INTERBANK_RATES.csv",
+  data_csv <-   data_list <- readr::read_delim( system.file("testdata/HISTORICAL_INTERBANK_RATES.csv", package = "fin.backend"),
                           delim = ";", escape_double = FALSE, col_types = cols(
                             `Titre :` = col_date(format = "%d/%m/%Y"),
                             `EURIBOR à 1 mois` = col_double(),
@@ -137,7 +138,7 @@ data_file.load_euribor <- function() {
 data_file.load_vix <- function() {
 
   suppressWarnings(
-  data_list <- readr::read_delim("data/ref/HISTORICAL_VIX.csv",
+  data_list <- readr::read_delim(system.file("testdata/HISTORICAL_VIX.csv", package = "fin.backend"),
                         col_types = cols(Date = col_date(format = "%Y-%m-%d"),
                                          Close = col_skip(),
                                          Volume = col_skip()))
@@ -157,7 +158,7 @@ data_file.load_vix <- function() {
 data_file.load_vxd <- function() {
 
   suppressWarnings(
-  data_list <- readr::read_delim("data/ref/HISTORICAL_VXD.csv",
+  data_list <- readr::read_delim(system.file("testdata/HISTORICAL_VXD.csv", package = "fin.backend"),
                         col_types = cols(DATE = col_date(format = "%m/%d/%Y")))
   )
 

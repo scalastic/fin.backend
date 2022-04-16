@@ -8,7 +8,7 @@
 #' @export
 flag_r.set_levels <- function(levels_value) {
 
-  assign("yoolook.levels", levels_value, envir = .GlobalEnv)
+  assign("fin.backend.levels", levels_value, envir = .GlobalEnv)
 }
 
 #' Title
@@ -18,8 +18,8 @@ flag_r.set_levels <- function(levels_value) {
 #' @return
 #' @export
 flag_r.get_levels <- function() {
-  if (exists("yoolook.levels", envir = .GlobalEnv)) {
-    return(get("yoolook.levels", envir = .GlobalEnv))
+  if (exists("fin.backend.levels", envir = .GlobalEnv)) {
+    return(get("fin.backend.levels", envir = .GlobalEnv))
   } else {
     default_levels <- c(0.25, 2:7)
     flag_r.set_levels(default_levels)

@@ -1,5 +1,3 @@
-library(data.table)
-
 
 #' Technical Indicator
 #'

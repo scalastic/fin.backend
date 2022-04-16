@@ -1,4 +1,4 @@
-Constants.Core <- 4
+Constants.Core <- 8
 
 Constants.VERBOSE = FALSE
 
@@ -72,7 +72,7 @@ constant.get_order_label <- function(value) {
 }
 
 #' @export
-constant.NEUTRAL_VALUE <- 0.01
+constant.NEUTRAL_VALUE <- 1
 
 #
 # Algo Type
