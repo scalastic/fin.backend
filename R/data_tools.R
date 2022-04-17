@@ -11,13 +11,13 @@
 #' @export
 data_tools.get_forecasting_dates <- function(asset_code, start_date, end_date) {
 
-  indice_dates <- data_file.load_fchi()
+  indice_dates <- db_asset.load("CAC_40")
   indice_dates <- indice_dates[date >= start_date & date <= end_date, .(date)]
-  currency_dates <- data_file.load_currencies()
+  currency_dates <- db_currency.load()
   currency_dates <- currency_dates[date >= start_date & date <= end_date, .(date)]
-  vix_dates <- data_file.load_vix()
+  vix_dates <- db_volatility.load("VIX")
   vix_dates <- vix_dates[date >= start_date & date <= end_date, .(date)]
-  vxd_dates <- data_file.load_vxd()
+  vxd_dates <- db_volatility.load("VXD")
   vxd_dates <- vxd_dates[date >= start_date & date <= end_date, .(date)]
 
   indice_dates[currency_dates[vix_dates[vxd_dates, nomatch = 0], nomatch = 0], nomatch = 0][, date]
@@ -34,13 +34,13 @@ data_tools.get_forecasting_dates <- function(asset_code, start_date, end_date) {
 #' @export
 data_tools.get_daily_forecasting_dates <- function(asset_code, last_date) {
 
-  indice_dates <- data_file.load_fchi()
+  indice_dates <- db_asset.load("CAC_40")
   indice_dates <- indice_dates[date > last_date, .(date)]
-  currency_dates <- data_file.load_currencies()
+  currency_dates <- db_currency.load()
   currency_dates <- currency_dates[date > last_date, .(date)]
-  vix_dates <- data_file.load_vix()
+  vix_dates <- db_volatility.load("VIX")
   vix_dates <- vix_dates[date > last_date, .(date)]
-  vxd_dates <- data_file.load_vxd()
+  vxd_dates <- db_volatility.load("VXD")
   vxd_dates <- vxd_dates[date > last_date, .(date)]
 
   indice_dates[currency_dates[vix_dates[vxd_dates, nomatch = 0], nomatch = 0], nomatch = 0][, date]
@@ -66,10 +66,10 @@ data_tools.load_raw_data <- function(indice_code, day_date,
   raw_data <- list()
 
   # From DB
-  raw_data$indice_data <- data_file.load_fchi()[date <= day_date, ]
-  raw_data$currency_data <- data_file.load_currencies()[date <= day_date, ]
-  raw_data$vix_data <- data_file.load_vix()[date <= day_date, ]
-  raw_data$vxd_data <- data_file.load_vxd()[date <= day_date, ]
+  raw_data$indice_data <- db_asset.load("CAC_40")[date <= day_date, ]
+  raw_data$currency_data <- db_currency.load()[date <= day_date, ]
+  raw_data$vix_data <- db_volatility.load("VIX")[date <= day_date, ]
+  raw_data$vxd_data <- db_volatility.load("VXD")[date <= day_date, ]
 
   if(geometric_point_t1) raw_data$geo_pt_t1_data <- db_geo_pt_t1.load(indice_code)[date <= day_date, ]
   if(geometric_point_t2) raw_data$geo_pt_t2_data <- db_geo_pt_t2.load(indice_code)[date <= day_date, ]
@@ -109,10 +109,10 @@ data_tools.update_raw_data <- function(raw_data, indice_code, day_date,
                                        delta_point = T, dynamic_flag = T) {
 
   # From DB
-  raw_data$indice_data <- data_file.load_fchi()[date <= day_date, ]
-  raw_data$currency_data <- data_file.load_currencies()[date <= day_date, ]
-  raw_data$vix_data <- data_file.load_vix()[date <= day_date, ]
-  raw_data$vxd_data <- data_file.load_vxd()[date <= day_date, ]
+  raw_data$indice_data <- db_asset.load("CAC_40")[date <= day_date, ]
+  raw_data$currency_data <- db_currency.load()[date <= day_date, ]
+  raw_data$vix_data <- db_volatility.load("VIX")[date <= day_date, ]
+  raw_data$vxd_data <- db_volatility.load("VXD")[date <= day_date, ]
 
   if(geometric_point_t1) raw_data$geo_pt_t1_data <- db_geo_pt_t1.load(indice_code)[date <= day_date, ]
   if(geometric_point_t2) raw_data$geo_pt_t2_data <- db_geo_pt_t2.load(indice_code)[date <= day_date, ]
