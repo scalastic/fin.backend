@@ -9,9 +9,6 @@ flag_r_fix_flag_neutral(level, new_ttt_data, previous_ttt_data)
 \arguments{
 \item{previous_ttt_data}{}
 }
-\value{
-
-}
 \description{
 Computes and fixes neutral flags on daily process.
 }

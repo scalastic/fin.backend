@@ -11,10 +11,11 @@ data_tools.sample(flat_data, forecast_data, order, level, day_date)
 
 \item{forecast_data}{the data from to sample}
 
-\item{day_date}{}
-}
-\value{
+\item{order}{the type to sample against}
 
+\item{level}{the level to sample}
+
+\item{day_date}{the date until the sample is made}
 }
 \description{
 Samples data to filter forecast.

@@ -4,12 +4,14 @@
 \alias{data_tools.extract_forecasting_data_by_level}
 \title{Extracts the forecasting data depending on the forecast date and the level.}
 \usage{
-data_tools.extract_forecasting_data_by_level(x, jour_date, level)
+data_tools.extract_forecasting_data_by_level(x, forecast_date, level)
 }
 \arguments{
 \item{x}{the \code{data.table} containing the forecasting data}
 
-\item{level}{}
+\item{forecast_date}{the forecast date}
+
+\item{level}{the level to forecast}
 }
 \description{
 Extracts the forecasting data depending on the forecast date and the level.

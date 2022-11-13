@@ -2,16 +2,18 @@
 % Please edit documentation in R/data_tools.R
 \name{data_tools.target_to_factor}
 \alias{data_tools.target_to_factor}
-\title{Title}
+\title{Converts target into factor}
 \usage{
-data_tools.target_to_factor(learning_data, order, level)
+data_tools.target_to_factor(learning_data, order)
 }
 \arguments{
-\item{level}{}
+\item{learning_data}{the date to convert}
+
+\item{order}{the order of conversion}
 }
 \value{
-
+the converted data
 }
 \description{
-Title
+Converts target into factor
 }

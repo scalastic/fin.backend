@@ -4,12 +4,12 @@
 \alias{data_tools.extract_learning_data_by_level}
 \title{Extracts the learning data depending on the forecast date and the level.}
 \usage{
-data_tools.extract_learning_data_by_level(x, jour_date, level)
+data_tools.extract_learning_data_by_level(x, forecast_date)
 }
 \arguments{
 \item{x}{the \code{data.table} containing the learning data}
 
-\item{level}{}
+\item{forecast_date}{the forecast date}
 }
 \description{
 Extracts the learning data depending on the forecast date and the level.

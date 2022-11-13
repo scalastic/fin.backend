@@ -4,12 +4,12 @@
 \alias{data_tools.extract_forecasting_data}
 \title{Extracts the forecasting data depending on the forecast date}
 \usage{
-data_tools.extract_forecasting_data(x, jour_date)
+data_tools.extract_forecasting_data(x, forecast_date)
 }
 \arguments{
 \item{x}{the \code{data.table} containing the forecasting data}
 
-\item{jour_date}{}
+\item{forecast_date}{the forecast date}
 }
 \description{
 Extracts the forecasting data depending on the forecast date

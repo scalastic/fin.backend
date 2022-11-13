@@ -9,9 +9,6 @@ flag_r_check_flag_neutral(level, DT)
 \arguments{
 \item{DT}{}
 }
-\value{
-
-}
 \description{
 Title
 }

@@ -11,7 +11,7 @@
 #' @export
 data_tools.get_forecasting_dates <- function(asset_code, start_date, end_date) {
 
-  indice_dates <- db_asset.load("CAC_40")
+  indice_dates <- db_asset.load(asset_code)
   indice_dates <- indice_dates[date >= start_date & date <= end_date, .(date)]
   currency_dates <- db_currency.load()
   currency_dates <- currency_dates[date >= start_date & date <= end_date, .(date)]
@@ -34,7 +34,7 @@ data_tools.get_forecasting_dates <- function(asset_code, start_date, end_date) {
 #' @export
 data_tools.get_daily_forecasting_dates <- function(asset_code, last_date) {
 
-  indice_dates <- db_asset.load("CAC_40")
+  indice_dates <- db_asset.load(asset_code)
   indice_dates <- indice_dates[date > last_date, .(date)]
   currency_dates <- db_currency.load()
   currency_dates <- currency_dates[date > last_date, .(date)]
@@ -66,10 +66,10 @@ data_tools.load_raw_data <- function(indice_code, day_date,
   raw_data <- list()
 
   # From DB
-  raw_data$indice_data <- db_asset.load("CAC_40")[date <= day_date, ]
+  raw_data$indice_data <- db_asset.load(indice_code)[date <= day_date, ]
   raw_data$currency_data <- db_currency.load()[date <= day_date, ]
   raw_data$vix_data <- db_volatility.load("VIX")[date <= day_date, ]
-  raw_data$vxd_data <- db_volatility.load("VXD")[date <= day_date, ]
+  #raw_data$vxd_data <- db_volatility.load("VXD")[date <= day_date, ]
 
   if(geometric_point_t1) raw_data$geo_pt_t1_data <- db_geo_pt_t1.load(indice_code)[date <= day_date, ]
   if(geometric_point_t2) raw_data$geo_pt_t2_data <- db_geo_pt_t2.load(indice_code)[date <= day_date, ]
@@ -109,7 +109,7 @@ data_tools.update_raw_data <- function(raw_data, indice_code, day_date,
                                        delta_point = T, dynamic_flag = T) {
 
   # From DB
-  raw_data$indice_data <- db_asset.load("CAC_40")[date <= day_date, ]
+  raw_data$indice_data <- db_asset.load(indice_code)[date <= day_date, ]
   raw_data$currency_data <- db_currency.load()[date <= day_date, ]
   raw_data$vix_data <- db_volatility.load("VIX")[date <= day_date, ]
   raw_data$vxd_data <- db_volatility.load("VXD")[date <= day_date, ]
@@ -147,6 +147,8 @@ data_tools.update_raw_data <- function(raw_data, indice_code, day_date,
 #' @export
 data_tools.flat_raw_data <- function(raw_data, level, day_date, start_flat_raw_data) {
 
+  Target <- NULL
+
   tmp_data <- technical_tools.dynamic_merge(raw_data, exclude = "ttt_data")
 
   tmp_data[, Target := eval(as.symbol(paste0("Trend_", level, "pc")))]
@@ -176,8 +178,11 @@ data_tools.flat_raw_data <- function(raw_data, level, day_date, start_flat_raw_d
 #'
 #' @return a data.table containing the computed data
 #' @import data.table
+#' @importFrom utils tail
 #' @export
 data_tools.flat_rebalance_raw_data <- function(raw_data, level, day_date, start_flat_raw_data, n) {
+
+  Target <- NULL
 
   tmp_data <- technical_tools.dynamic_merge(raw_data, exclude = "ttt_data")
 
@@ -221,7 +226,7 @@ data_tools.flat_rebalance_raw_data <- function(raw_data, level, day_date, start_
 #' @export
 data_tools.filter_nonnumeric <- function(x) {
   nums <- sapply(x, is.numeric)
-  y <- x[ , ..nums]
+  y <- x[ , nums, with = FALSE]
   suppressWarnings(y[, date := NULL])
 }
 
@@ -231,13 +236,15 @@ data_tools.filter_nonnumeric <- function(x) {
 #' @param x the \code{data.table} to filter.
 #'
 #' @return the \code{data.table} filtered from all \code{Trend}.
+#'
+#' @import data.table
 #' @export
 data_tools.filter_trend <- function(x){
   modelVariables <- colnames(x)
   #variablesToremove <- grep(x = modelVariables, pattern = "Trend", value = TRUE)
   variablesToremove <- c(sapply(c(2:7), FUN = function(i) paste0("Trend_", i, "pc")), "Target")
   modelVariables <- modelVariables [! modelVariables %in% variablesToremove]
-  x[, ..modelVariables]
+  x[, modelVariables, with = FALSE]
 }
 
 
@@ -247,12 +254,14 @@ data_tools.filter_trend <- function(x){
 #' @param level the level to filter.
 #'
 #' @return the \code{data.table} filtered from \code{Trend} of \code{level}.
+#'
+#' @import data.table
 #' @export
 data_tools.filter_trend_by_level <- function(x, level){
   modelVariables <- colnames(x)
   variablesToremove <- grep(x = modelVariables, pattern = paste0("Trend_", level), value = TRUE)
   modelVariables <- modelVariables [! modelVariables %in% variablesToremove]
-  x[, ..modelVariables]
+  x[, modelVariables, with = FALSE]
 }
 
 
@@ -358,6 +367,8 @@ data_tools.transform_target <- function(x, order, level){
 #' @export
 BalanceMinority <- function(learningData, level) {
 
+  Target <- NULL
+
   N.level = nrow(learningData[Target == level])
   N.neutre = nrow(learningData[Target == 0])
 
@@ -370,41 +381,13 @@ BalanceMinority <- function(learningData, level) {
 }
 
 
-#' Re-balances target on learning data with \code{unbalanced::ubBalance}
-#'
-#' @param learningData the data to re-balance
-#' @param level the level of the target
-#' @param type the balancing technique to use (ubOver, ubUnder, ubSMOTE, ubOSS, ubCNN, ubENN, ubNCL, ubTomek).
-#'
-#' @return
-#' @import data.table
-#' @importFrom unbalanced ubBalance
-ReBalanceData <- function(learningData, level, type = "ubSMOTE"){
-
-  order_level <- BalanceMinority(learningData, level)
-  learningData[, Target := factor(Target, levels = order_level, labels = c(2, 1))]
-
-
-  Target_pos <- which(colnames(learningData) == "Target")
-  input <- learningData[ , -Target_pos, with=F]
-  output <- learningData[, Target]
-
-  data <- unbalanced::ubBalance(X = as.data.frame(input), Y = output, type = type, positive = 2)
-
-  balanced_data <- data.table(data$X, Target=data$Y)
-  balanced_data$Target <- factor(balanced_data[, Target], levels = c(2, 1), labels = order_level)
-
-  return(balanced_data)
-}
-
-
 #' Samples data to filter forecast.
 #'
 #' @param flat_data the data to sample
 #' @param forecast_data the data from to sample
-#' @param order
-#' @param level
-#' @param day_date
+#' @param order the type to sample against
+#' @param level the level to sample
+#' @param day_date the date until the sample is made
 #'
 #' @return
 #' @export
@@ -424,6 +407,8 @@ data_tools.sample <- function(flat_data, forecast_data, order, level, day_date){
 #'
 #' @param selected_variables
 #' @param to_scale
+#'
+#' @importFrom stats predict
 #'
 #' @export
 data_tools.transform <- function(x, selected_variables, to_scale = TRUE) {
@@ -449,6 +434,8 @@ data_tools.transform <- function(x, selected_variables, to_scale = TRUE) {
 #' @param level
 #' @param selected_variables
 #'
+#' @importFrom stats predict
+#'
 #' @export
 data_tools.transform_by_level <- function(x, level, selected_variables) {
 
@@ -463,15 +450,14 @@ data_tools.transform_by_level <- function(x, level, selected_variables) {
 }
 
 
-#' Title
+#' Converts target into factor
 #'
-#' @param learning_data
-#' @param order
-#' @param level
+#' @param learning_data the date to convert
+#' @param order the order of conversion
 #'
-#' @return
+#' @return the converted data
 #' @export
-data_tools.target_to_factor <- function(learning_data, order, level){
+data_tools.target_to_factor <- function(learning_data, order){
 
   learning_data[, Target := data_tools.get_target(learning_data, order)]
 }
@@ -480,13 +466,13 @@ data_tools.target_to_factor <- function(learning_data, order, level){
 #'
 #' @param x the \code{data.table} containing the learning data
 #'
-#' @param jour_date
-#' @param level
+#' @param day_date the date until when extraction is done
 #'
+#' @import data.table
 #' @export
-data_tools.extract_learning_data <- function(x, jour_date, level){
+data_tools.extract_learning_data <- function(x, day_date){
 
-  y <- x[date < jour_date, ]
+  y <- x[date < day_date, ]
 
   # target_symbol <- rlang::sym(paste0("Trend_", level, "pc"))
   # y[, Target := eval(target_symbol)]
@@ -495,20 +481,20 @@ data_tools.extract_learning_data <- function(x, jour_date, level){
   variables <- colnames(y)
   to_keep_variables <- variables[!variables %in% to_remove_variables]
 
-  y[, ..to_keep_variables]
+  y[, to_keep_variables, with = FALSE]
 }
 
 #' Extracts the learning data depending on the forecast date and the level.
 #'
 #' @param x the \code{data.table} containing the learning data
 #'
-#' @param jour_date
-#' @param level
+#' @param forecast_date the forecast date
 #'
+#' @import data.table
 #' @export
-data_tools.extract_learning_data_by_level <- function(x, jour_date, level){
+data_tools.extract_learning_data_by_level <- function(x, forecast_date){
 
-  y <- x[date < jour_date, ]
+  y <- x[date < forecast_date, ]
 
   # target_symbol <- rlang::sym(paste0("Trend_", level, "pc"))
   # y[, Target := eval(target_symbol)]
@@ -517,39 +503,43 @@ data_tools.extract_learning_data_by_level <- function(x, jour_date, level){
   variables <- colnames(y)
   to_keep_variables <- variables[!variables %in% to_remove_variables]
 
-  y[, ..to_keep_variables]
+  y[, to_keep_variables, with = FALSE]
 }
 
 #' Extracts the forecasting data depending on the forecast date
 #'
 #' @param x the \code{data.table} containing the forecasting data
 #'
-#' @param jour_date
+#' @param forecast_date the forecast date
 #'
+#' @import data.table
 #' @export
-data_tools.extract_forecasting_data <- function(x, jour_date){
-  y <- x[date == jour_date, ]
+data_tools.extract_forecasting_data <- function(x, forecast_date){
+
+  y <- x[date == forecast_date, ]
 
   to_remove_variables <- c("date", "Target")
   variables <- colnames(y)
   to_keep_variables <- variables[!variables %in% to_remove_variables]
 
-  y[, ..to_keep_variables]
+  y[, to_keep_variables, with = FALSE]
 }
 
 #' Extracts the forecasting data depending on the forecast date and the level.
 #'
 #' @param x the \code{data.table} containing the forecasting data
-#' @param jour_date
-#' @param level
+#' @param forecast_date the forecast date
+#' @param level the level to forecast
 #'
+#' @import data.table
 #' @export
-data_tools.extract_forecasting_data_by_level <- function(x, jour_date, level){
-  y <- x[date == jour_date, ]
+data_tools.extract_forecasting_data_by_level <- function(x, forecast_date, level){
+
+  y <- x[date == forecast_date, ]
 
   to_remove_variables <- c("date", grep(paste0("Trend_", level), colnames(y), value = TRUE))
   variables <- colnames(y)
   to_keep_variables <- variables[!variables %in% to_remove_variables]
 
-  y[, ..to_keep_variables]
+  y[, to_keep_variables, with = FALSE]
 }

@@ -13,9 +13,6 @@ data_tools.transform_target(x, order, level)
 
 \item{level}{the level to consider.}
 }
-\value{
-
-}
 \description{
 Transform Target to a 2-class factor depending on level and order.
 }

@@ -6,9 +6,6 @@
 \usage{
 init_db.import_data()
 }
-\value{
-
-}
 \description{
 Title
 }

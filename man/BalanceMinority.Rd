@@ -11,9 +11,6 @@ BalanceMinority(learningData, level)
 
 \item{level}{the level of the target}
 }
-\value{
-
-}
 \description{
 Re-balances target on learning data
 }

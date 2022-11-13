@@ -9,9 +9,6 @@ flag_r_get_flag_neutral(level, DT)
 \arguments{
 \item{DT}{}
 }
-\value{
-
-}
 \description{
 Computes neutral flags on bulk process.
 }

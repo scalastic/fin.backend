@@ -9,9 +9,6 @@ flag_r_check_flag_r(d_day, level, DT_by_level)
 \arguments{
 \item{DT_by_level}{}
 }
-\value{
-
-}
 \description{
 Title
 }

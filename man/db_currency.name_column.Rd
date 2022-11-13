@@ -9,9 +9,6 @@ db_currency.name_column(dt, to_keep, name)
 \arguments{
 \item{name}{}
 }
-\value{
-
-}
 \description{
 Title
 }

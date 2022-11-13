@@ -9,9 +9,6 @@ flag_r.get_levels()
 \arguments{
 \item{levels}{}
 }
-\value{
-
-}
 \description{
 Title
 }

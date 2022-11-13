@@ -5,6 +5,7 @@
 #' @return a data.table containing the currencies
 #' @importFrom readr read_delim cols col_date col_double col_skip locale
 #' @import data.table
+#' @importFrom stats na.omit
 #' @export
 #' @example data_file.load_currencies()
 data_file.load_currencies <- function() {
@@ -59,7 +60,7 @@ data_file.load_currencies <- function() {
 
   data_dt <- na.omit(setDT(data_list, check.names = TRUE))
   data_dt <- setnames(data_dt, c("date", "aud", "cad", "chf", "cny", "gbp", "inr", "jpy", "usd"))
-  data_dt <- data_dt[, date := format( date, "%Y-%m-%d")]
+  data_dt <- data_dt[, date := format(date, "%Y-%m-%d")]
 
   setkey (data_dt, date)
 
@@ -134,19 +135,20 @@ data_file.load_euribor <- function() {
 #'
 #' @return a data.table containing the VIX's values
 #' @importFrom readr read_delim
+#' @importFrom stats na.omit
 #' @export
 data_file.load_vix <- function() {
 
   suppressWarnings(
   data_list <- readr::read_delim(system.file("testdata/HISTORICAL_VIX.csv", package = "fin.backend"),
-                        col_types = cols(Date = col_date(format = "%Y-%m-%d"),
+                        col_types = cols(Date = col_date(format = "%m/%d/%Y"),
                                          Close = col_skip(),
                                          Volume = col_skip()))
   )
 
   data_dt <- na.omit(setDT(data_list, check.names = TRUE))
   data_dt <- setnames(data_dt, c("date", "open", "high", "low", "close"))
-  data_dt <- data_dt[, date:=format(date, "%Y-%m-%d")]
+  data_dt <- data_dt[, date:=as.character(parse_date(date, format="%m/%d/%Y"))]
   setkey (data_dt, date)
 }
 
@@ -154,6 +156,7 @@ data_file.load_vix <- function() {
 #'
 #' @return a data.table containing the VXD's values
 #' @importFrom readr read_delim
+#' @importFrom stats na.omit
 #' @export
 data_file.load_vxd <- function() {
 
@@ -164,6 +167,7 @@ data_file.load_vxd <- function() {
 
   data_dt <- na.omit(setDT(data_list, check.names = TRUE))
   data_dt <- setnames(data_dt, c("date", "open", "high", "low", "close"))
-  data_dt <- data_dt[, date:=format(date, "%Y-%m-%d")]
+  #data_dt <- data_dt[, date:=as.character(parse_date(date, format="%m/%d/%Y"))]
   setkey (data_dt, date)
 }
+
