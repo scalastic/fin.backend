@@ -21,7 +21,7 @@ flag_r.get_levels <- function() {
   if (exists("fin.backend.levels", envir = .GlobalEnv)) {
     return(get("fin.backend.levels", envir = .GlobalEnv))
   } else {
-    default_levels <- c(0.25, 2:7)
+    default_levels <- c(2:7)
     flag_r.set_levels(default_levels)
     return(default_levels)
   }

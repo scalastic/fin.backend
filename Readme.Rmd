@@ -58,18 +58,18 @@ plan(sequential)
 
 #### Clean-up (if needed)
 
--   DB is located under `~/PROJETS/fin/fin.db`
+-   DB is located under `~/fin.db`
 -   Delete all files in `./fin.db/mongo-db/*`
 -   Delete log file `./fin.db/log/mongo.log`
 
-#### Star the DB
+#### Start the DB
 
--   DB is located under `~/PROJETS/fin/fin.db`
+-   DB is located under `~/fin.db`
 -   Execute `./fin-db/mongo.sh`
 
-### R Project
+### Manage R project
 
--   R project is located under `~/PROJETS/fin/fin.backend`
+-   R project is located under `~/fin.backend`
 
 #### Build with RStudio
 
@@ -78,10 +78,24 @@ plan(sequential)
 ```bash
     Restarting R session...
 
-    * Project '~/PROJETS/fin/fin.backend' loaded. [renv 0.16.0]
+    * Project '~/fin.backend' loaded. [renv 0.16.0]
     > library(fin.backend)
     > 
 ```
 
 -   Put the downloaded CSV data under `./fin.backend/inst/testdata/` directory
 -   Execute the import function `init-db.import_data()`
+
+### Export data to CSV
+
+```{r export}
+library(fin.backend)
+library(future)
+library(progress)
+
+plan(multisession)
+
+export_csv.X_y("CAC_40", "2022-11-11", "2022-11-01", "~/fin.data/")
+
+plan(sequential)
+```

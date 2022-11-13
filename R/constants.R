@@ -1,4 +1,4 @@
-Constants.Core <- 8
+Constants.Core <- 10
 
 Constants.VERBOSE = FALSE
 
